@@ -5,10 +5,11 @@ const Table = ({purchase, onDelete})=> {
         <>
             <h3>{purchase.item}</h3>
             <div>
-                <span>{purchase.price}</span>
-                <span>{purchase.category}</span>
-                <span>{purchase.date.slice(0,10)}</span>
-                <button type='submit' onClick={onDelete}>Delete</button>
+                <span>PRICE : ${purchase.price} | </span>
+                <span>CATEGORY : {purchase.category} | </span>
+                <span>DATE : {purchase.date.slice(0,10)}  </span>
+                <button type='submit' onClick={onDelete}> Delete </button>
+                <button type='button'> Update </button>
             </div>
             {/* data => (<tr key={data.id}>{data.map(item =><td key={item.id}>{item}</td>)} <button type='button' onClick={onDelete}>delete</button></tr>))} */}
 

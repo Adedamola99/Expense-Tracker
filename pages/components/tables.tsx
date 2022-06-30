@@ -12,6 +12,8 @@ const Tables = ({data, userid}) =>{
   //  const refreshData = () => {
     //    router.replace(router.asPath);
   //  }
+
+    const [addNew, setAddNew] = useState(false)
     
     const upateTable= async() => {
        
@@ -20,6 +22,16 @@ const Tables = ({data, userid}) =>{
 
        setpurchase(data)
         // setrecentSpendings(recentSpendings => [...recentSpendings, snewData])
+    }
+
+    const add = ()=>{
+        if(addNew == true) {
+            setAddNew(false)
+        }
+        else{
+            setAddNew(true)
+        }
+        
     }
     const addPurchase = async(item, category, amount, date, user) => {
         const purchase = {item: item, category: category, price:amount, date:date,  user:user}
@@ -31,29 +43,26 @@ const Tables = ({data, userid}) =>{
             },
             body: JSON.stringify(purchase),
         })
+
+        setAddNew(false)
+
     }
 
     const onDelete = async(id)=>{
-        console.log('The data gotten by ssr is -> ' + data.item)
-        console.log('The current state of the Data is ' + purchase[0].item)
-        axios.delete(`http://localhost:7000/api/v2/spendingApp/purchase/${id}`)
-        .then(res => console.log(res.data))
-		.catch(err => console.log(err.message))
-
-        const purchdata = axios.get(`http://localhost:7000/api/v2/spendingApp/purchase?userid=${userid}`)
-        console.log('New data is' + purchdata)
-        //setpurchase([purchdata])
+        await fetch(`http://localhost:7000/api/v2/spendingApp/purchase/${id}`,{method: 'DELETE'})
+        
+        upateTable()
     }
     return(
         <>
         <h3>Recent Spendings</h3>
        
         <div>
-        {purchase.map((item)=>(<Table key={item._id} purchase={item} onDelete={() => onDelete(item._id)} />))}
+        {purchase.length >1 ? purchase.map((item)=>(<Table key={item._id} purchase={item} onDelete={() => onDelete(item._id)} />)) : <h3> No Data to Display </h3>}
         </div>
-        <NewPurchase user={userid}  addPurchase={addPurchase} refreshData={upateTable}/>
+        <button type='button' onClick={add}> Add New Purchase </button>
 
-        <button > Refresh</button>
+        { addNew && <NewPurchase user={userid}  addPurchase={addPurchase} refreshData={upateTable}/>}
 
         </>
     )
