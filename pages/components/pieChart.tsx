@@ -42,11 +42,43 @@ const PChart = () => {
   }
 ]
 
-    // for(let i in data){
-    // if( (for i in pfutdata  ) ) {   
-    // const newEntry = {tite : data[i].category, value: 0, color: '#E28127'} 
-    // }
+    const randColorGen = () => {
+       const list = [1,2,3,4,5,6,7,8,9,'A','B','C','D','E','F']
+       let color = '';
 
+       while (color.length < 6){
+           color = color + String(list[Math.floor(Math.random() * list.length)]);
+        }
+
+        return ('#'+color)
+    }
+    for(let i in data){
+
+        for (x in pfutdata){
+            if( pfutdata[x].title != data[i].category){
+                pfutdata.push({title: data[i].category, value: data[i].price, color: () => randColorGen()})
+            }
+            else{
+                
+                function titleIndex( pfutdata, category) {
+                    let index = -1
+                    for(i in myarray){
+                        if (myarray[i].title == category){
+                            index = i
+                        }
+                    }
+                    return index
+                } 
+                
+                const theIndex = titleIndex(pfutdata, data[i].category)
+                
+                pfutdata[theIndex].value = pfutdata[theIndex].value + data[i].price 
+
+            }
+        } 
+     }
+
+     console.log(pfutdata)
     
 
     const piedata = [
